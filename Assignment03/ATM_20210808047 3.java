@@ -4,10 +4,9 @@ public class ATM_20210808047 {
     
     //You can pass a scanner object as a parameter
     public static int menuDisplay(String[] items , Scanner input) {
-        System.out.println("1 - " + items[0]);
-        System.out.println("2 - " + items[1]);
-        System.out.println("3 - " + items[2]);
-        System.out.println("4 - " + items[3]);
+       for(int i = 0; i < items.length; i++) {
+       System.out.println((i + 1) + " - " + items[i]);
+       }
         System.out.println("0 to Quit");
         System.out.print("Please enter your selection >> ");
         return input.nextInt();
