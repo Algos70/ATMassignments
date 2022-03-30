@@ -38,3 +38,20 @@ class AccountNotFoundException extends RuntimeException {
     }
 
 }
+
+class BalanceRemainingException extends RuntimeException {
+    private double balance;
+
+    public BalanceRemainingException(double newBalance) {
+        this.balance = newBalance;
+    }
+
+    public double getBalance() {
+        return this.balance;
+    }
+
+    @Override
+    public String toString() {
+        return "BalanceRemainingException: " + this.balance;
+    }
+}
