@@ -16,9 +16,9 @@ class Bank {
     public Bank(String newName, String newAddress) {
         this.name = newName;
         this.address = newAddress;
-        customers = new ArrayList<>();
-        companies = new ArrayList<>();
-        accounts = new ArrayList<>();
+        this.customers = new ArrayList<>();
+        this.companies = new ArrayList<>();
+        this.accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -38,8 +38,127 @@ class Bank {
     }
 
     public void addCustomer(int newId, String newName, String newSurname) {
+        Customer newCustomer = new Customer(newName, newSurname);
+        newCustomer.setId(newId);
+        this.customers.add(newCustomer);
 
     }
+
+    public void addCompany(int id, String newName) {
+        Company newCompany = new Company(newName);
+        newCompany.setId(id);
+        this.companies.add(newCompany);
+    }
+
+    public void addAccount(Account newAccount) {
+        this.accounts.add(newAccount);
+    }
+
+    public Customer getCustomer(int id) {
+        for (Customer customer : customers) {
+            if (customer.getId() == id) {
+                return customer;
+            }
+
+        }
+
+        throw new CustomerNotFoundException(id);
+    }
+
+    public Customer getCustomer(String newName, String newSurname) {
+        for (Customer customer : customers) {
+            if (customer.getName().equals(newName) && customer.getSurname().equals(newSurname)) {
+                return customer;
+            }
+        }
+
+        throw new CustomerNotFoundException(newName, newSurname);
+    }
+
+    public Company getCompany(int id) {
+        for (Company company : companies) {
+            if (company.getId() == id) {
+                return company;
+            }
+        }
+
+        throw new CompanyNotFoundException(id);
+    }
+
+    public Company getCompany(String name) {
+        for (Company company : companies) {
+            if (company.getName().equals(name)) {
+                return company;
+            }
+        }
+
+        throw new CompanyNotFoundException(name);
+    }
+
+    public Account getAccount(String acctNumber) {
+        for (Account account : accounts) {
+            if (account.getAcctNum().equals(acctNumber)) {
+                return account;
+            }
+        }
+
+        throw new AccountNotFoundException(acctNumber);
+    }
+
+    public void transferFunds(String accountFrom, String accountTo, double amount) {
+        getAccount(accountFrom);
+        getAccount(accountTo);
+
+        Account acctFrom = getAccount(accountFrom);
+        acctFrom.withdrawal(amount);
+
+        Account acctTo = getAccount(accountTo);
+        acctTo.deposit(amount);
+    }
+
+    public void closeAccount(String acctNum) {
+        boolean isFound = false;
+        for (Account account : accounts) {
+            if (account.getAcctNum().equals(acctNum)) {
+                if (account.getBalance() == 0) {
+                    accounts.remove(account);
+                    isFound = true;
+                } else {
+                    throw new BalanceRemainingException(account.getBalance());
+                }
+
+            }
+        }
+
+        if (!isFound) {
+            throw new AccountNotFoundException(acctNum);
+        }
+    }
+
+    @Override
+    public String toString() {
+        String text = "" + getName() + "\t" + getAddress();
+        for (int i = 0; i < companies.size(); i++) {
+            text += "\n";
+            text += "\t" + companies.get(i).getName() + "\n";
+            for (int j = 0; j < companies.get(i).getBusinessAccounts().size(); j++) {
+                text += "\t" + "\t" + companies.get(i).getBusinessAccounts().get(j).getAcctNum() + "\t" +
+                        companies.get(i).getBusinessAccounts().get(j).getRate() + "\t" +
+                        companies.get(i).getBusinessAccounts().get(j).getBalance();
+            }
+        }
+
+        for (int i = 0; i < customers.size(); i++) {
+            text += "\n" + "\t" + customers.get(i).getName() + "\n";
+            for (int j = 0; j < customers.get(i).getPersonalAccounts().size(); j++) {
+                text += "\t" + "\t" + customers.get(i).getPersonalAccounts().get(j).getAcctNum() + "\t" +
+                        customers.get(i).getPersonalAccounts().get(j).getBalance();
+            }
+        }
+
+    }
+
+
 }
 
 class Account {
@@ -201,6 +320,10 @@ class Customer {
         return this.id;
     }
 
+    public ArrayList<PersonalAccount> getPersonalAccounts() {
+        return this.personalAccounts;
+    }
+
     public void setId(int newId) {
         if (newId > 0) {
             this.id = newId;
@@ -262,6 +385,7 @@ class Company {
 
     public Company(String newName) {
         this.name = newName;
+        accounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -287,6 +411,10 @@ class Company {
 
     public void openAccount(String newAcctNumber, double newInterestRate) {
         accounts.add(new BusinessAccount(newAcctNumber, 0 , newInterestRate));
+    }
+
+    public ArrayList<BusinessAccount> getBusinessAccounts() {
+        return this.accounts;
     }
 
     public BusinessAccount getAccount(String acctNumToSearch) {
