@@ -74,7 +74,7 @@ class Account {
         if (amount >= 0) {
             this.balance += amount;
         } else {
-            RuntimeException exception = new RuntimeException();
+            RuntimeException exception = new InvalidAmountException(amount);
             throw exception;
         }
     }
@@ -83,7 +83,7 @@ class Account {
         if (amount >= 0 && (this.balance - amount >= 0)) {
             this.balance -= amount;
         } else {
-            throw new RuntimeException();
+            throw new InvalidAmountException(amount);
         }
     }
 
@@ -177,7 +177,77 @@ class BusinessAccount extends Account {
     }
 }
 
-class Customer {}
+class Customer {
+    private int id;
+    private String name;
+    private String surname;
+    private ArrayList<PersonalAccount> personalAccounts;
+
+    public Customer(String newName, String newSurname) {
+        this.name = newName;
+        this.surname = newSurname;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getSurname() {
+        return this.surname;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int newId) {
+        this.id = newId;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setSurname(String newSurname) {
+        this.surname = newSurname;
+    }
+
+    public void openAccount(String newAcctNumber) {
+        this.personalAccounts.add(new PersonalAccount(newAcctNumber, this.name , this.surname , 0));
+    }
+
+    //Look into this later!!
+    public PersonalAccount getAccount(String acctNumToSearch) {
+        for (PersonalAccount account : personalAccounts) {
+            if (account.getAcctNum().equals(acctNumToSearch)) {
+                return account;
+            }
+        }
+        throw new AccountNotFoundException(acctNumToSearch);
+    }
+
+    public void closeAccount(String acctNumber) {
+        boolean isFound = false;
+        for (PersonalAccount account : personalAccounts) {
+            if (account.getAcctNum().equals(acctNumber)) {
+                if (account.getBalance() == 0) {
+                    personalAccounts.remove(account);
+                    isFound = true;
+                } else {
+                    throw new BalanceRemainingException(account.getBalance());
+                }
+            }
+        }
+
+        if (!isFound) {
+            throw new AccountNotFoundException(acctNumber);
+        }
+    }
+
+    public String toString() {
+        return this.name + " " + this.surname.toUpperCase();
+    }
+}
 
 class Company {}
 
