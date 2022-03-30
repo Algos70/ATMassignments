@@ -156,6 +156,8 @@ class Bank {
             }
         }
 
+        return text;
+
     }
 
 
