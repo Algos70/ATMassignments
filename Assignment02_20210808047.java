@@ -1,6 +1,5 @@
 /*  Author: Abdurrahman Kursat Ozkan  Version: 30/03/2022 */
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Assignment02_20210808047 {
@@ -53,5 +52,28 @@ class BalanceRemainingException extends RuntimeException {
     @Override
     public String toString() {
         return "BalanceRemainingException: " + this.balance;
+    }
+}
+
+class CompanyNotFoundException extends RuntimeException {
+    private int id;
+    private String name;
+
+    public CompanyNotFoundException(int newId) {
+        this.id = newId;
+        this.name = null;
+    }
+
+    public CompanyNotFoundException(String newName) {
+        this.name = newName;
+        this.id = 0;
+    }
+
+    public String toString() {
+        if (name != null) {
+            return "CompanyNotFoundException: name -" + this.name;
+        } else {
+            return "CompanyNotFoundException: id -" + this.id;
+        }
     }
 }
