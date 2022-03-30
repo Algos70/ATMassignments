@@ -106,4 +106,17 @@ class CustomerNotFoundException extends RuntimeException {
     }
 }
 
+class InvalidAmountException extends RuntimeException {
+    private double amount;
+
+    public InvalidAmountException(double newAmount) {
+        this.amount = newAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "InvalidAmountException: " + this.amount;
+    }
+}
+
 
