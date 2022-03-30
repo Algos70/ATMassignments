@@ -69,11 +69,41 @@ class CompanyNotFoundException extends RuntimeException {
         this.id = 0;
     }
 
+    @Override
     public String toString() {
         if (name != null) {
-            return "CompanyNotFoundException: name -" + this.name;
+            return "CompanyNotFoundException: name - " + this.name;
         } else {
-            return "CompanyNotFoundException: id -" + this.id;
+            return "CompanyNotFoundException: id - " + this.id;
         }
     }
 }
+
+class CustomerNotFoundException extends RuntimeException {
+    private int id;
+    private String name;
+    private String surname;
+
+    public CustomerNotFoundException(int newId) {
+        this.id = newId;
+        this.name = null;
+        this.surname = null;
+    }
+
+    public CustomerNotFoundException(String newName, String newSurname) {
+        this.name = newName;
+        this.surname = newSurname;
+        this.id = 0;
+    }
+
+    @Override
+    public String toString() {
+        if (this.name != null && this.surname != null) {
+            return "CustomerNotFoundException: name - " + this.name + " " + this.surname;
+        } else {
+            return "CustomerNotFoundException: id - " + this.id;
+        }
+    }
+}
+
+
