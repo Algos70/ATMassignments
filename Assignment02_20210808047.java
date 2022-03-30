@@ -144,7 +144,38 @@ class PersonalAccount extends Account {
     }
 }
 
-class BusinessAccount extends Account {}
+class BusinessAccount extends Account {
+    private double interestRate;
+
+    public BusinessAccount(String newAcctNumber, double newInterestRate) {
+        this(newAcctNumber, 0 , newInterestRate);
+    }
+
+    public BusinessAccount(String newAcctNumber,double newBalance, double newInterestRate) {
+        super(newAcctNumber, newBalance);
+        if (newInterestRate > 0) {
+            this.interestRate = newInterestRate;
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    public double getRate() {
+        return this.interestRate;
+    }
+
+    public void setRate(double newInterestRate) {
+        if (newInterestRate > 0) {
+            this.interestRate = newInterestRate;
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    public double calculateInterest() {
+        return super.getBalance() * this.interestRate;
+    }
+}
 
 class Customer {}
 
