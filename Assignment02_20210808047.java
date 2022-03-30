@@ -12,9 +12,85 @@ class Bank {
     private ArrayList<Customer> customers;
     private ArrayList<Company> companies;
     private ArrayList<Account> accounts;
+
+    public Bank(String newName, String newAddress) {
+        this.name = newName;
+        this.address = newAddress;
+        customers = new ArrayList<>();
+        companies = new ArrayList<>();
+        accounts = new ArrayList<>();
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public void setAddress(String newAddress) {
+        this.address = newAddress;
+    }
+
+    public void addCustomer(int newId, String newName, String newSurname) {
+
+    }
 }
 
-class Account {}
+class Account {
+    private String acctNumber;
+    private double balance;
+
+    public Account(String newAcctNumber) {
+        this.acctNumber = newAcctNumber;
+        this.balance = 0;
+    }
+
+    public Account(String newAcctNumber, double newBalance) {
+        this.acctNumber = newAcctNumber;
+
+        if (newBalance < 0) {
+            RuntimeException exception = new RuntimeException();
+            throw exception;
+        } else {
+            this.balance = newBalance;
+        }
+    }
+
+    public String getAcctNum() {
+        return this.acctNumber;
+    }
+
+    public double getBalance() {
+        return this.balance;
+    }
+
+    public void deposit(double amount) {
+        if (amount >= 0) {
+            this.balance += amount;
+        } else {
+            RuntimeException exception = new RuntimeException();
+            throw exception;
+        }
+    }
+
+    public void withdrawal(double amount) {
+        if (amount >= 0 && (this.balance - amount >= 0)) {
+            this.balance -= amount;
+        } else {
+            throw new RuntimeException();
+        }
+    }
+
+    public String toString() {
+        return "Account " + this.acctNumber + " has " + this.balance;
+    }
+}
 
 class PersonalAccount extends Account {}
 
