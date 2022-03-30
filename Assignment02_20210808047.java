@@ -186,6 +186,7 @@ class Customer {
     public Customer(String newName, String newSurname) {
         this.name = newName;
         this.surname = newSurname;
+        this.personalAccounts = new ArrayList<>();
     }
 
     public String getName() {
@@ -201,7 +202,12 @@ class Customer {
     }
 
     public void setId(int newId) {
-        this.id = newId;
+        if (newId > 0) {
+            this.id = newId;
+        } else {
+            throw new RuntimeException();
+        }
+
     }
 
     public void setName(String newName) {
@@ -249,7 +255,73 @@ class Customer {
     }
 }
 
-class Company {}
+class Company {
+    private int id;
+    private String name;
+    private ArrayList<BusinessAccount> accounts;
+
+    public Company(String newName) {
+        this.name = newName;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int newId) {
+        if (newId > 0) {
+            this.id = newId;
+        } else {
+            throw new RuntimeException();
+        }
+
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void openAccount(String newAcctNumber, double newInterestRate) {
+        accounts.add(new BusinessAccount(newAcctNumber, 0 , newInterestRate));
+    }
+
+    public BusinessAccount getAccount(String acctNumToSearch) {
+        for (BusinessAccount businessAcct : accounts) {
+            if (businessAcct.getAcctNum().equals(acctNumToSearch)) {
+                return businessAcct;
+            }
+        }
+
+        throw new AccountNotFoundException(acctNumToSearch);
+    }
+
+    public void closeAccount(String acctNum) {
+        boolean isFound = false;
+        for (BusinessAccount businessAcct : accounts) {
+            if (businessAcct.getAcctNum().equals(acctNum)) {
+                if (businessAcct.getBalance() == 0) {
+                    accounts.remove(businessAcct);
+                    isFound = true;
+                } else {
+                    throw new BalanceRemainingException(businessAcct.getBalance());
+                }
+
+            }
+        }
+
+        if (!isFound) {
+            throw new AccountNotFoundException(acctNum);
+        }
+    }
+
+    public String toString() {
+        return this.name;
+    }
+}
 
 class AccountNotFoundException extends RuntimeException {
     private String acctNum;
