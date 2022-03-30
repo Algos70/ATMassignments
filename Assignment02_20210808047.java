@@ -92,7 +92,57 @@ class Account {
     }
 }
 
-class PersonalAccount extends Account {}
+class PersonalAccount extends Account {
+    private String name;
+    private String surname;
+    private String pin;
+
+    public PersonalAccount(String newAcctNumber, String newName, String newSurname) {
+        this(newAcctNumber, newName, newSurname, 0);
+
+    }
+
+    public PersonalAccount(String newAcctNumber, String newName, String newSurname, double newBalance) {
+        super(newAcctNumber, newBalance);
+        this.name = newName;
+        this.surname = newSurname;
+        this.pin = "";
+
+        for (int i = 0; i < 4; i++) {
+            int random = (int)Math.round(Math.random() * 10);
+            this.pin += random;
+        }
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getSurname() {
+        return this.surname;
+    }
+
+    public String getPIN() {
+        return this.pin;
+    }
+
+    public void setName(String newName) {
+        this.name = newName;
+    }
+
+    public void setSurname(String newSurname) {
+        this.surname = newSurname;
+    }
+
+    public void setPIN(String newPin) {
+        this.pin = newPin;
+    }
+
+    public String toString() {
+        return "Account " + this.getAcctNum() + " belonging to " + this.name + " " + this.surname.toUpperCase() +
+                " has " + super.getBalance();
+    }
+}
 
 class BusinessAccount extends Account {}
 
